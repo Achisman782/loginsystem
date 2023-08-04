@@ -1,7 +1,4 @@
-if (process.env.NODE_ENV !== 'production') {
-    require('dotenv').config()
-}
-
+require('dotenv').config()
 const express = require('express');
 const app = express();
 const bcrypt = require('bcrypt');
@@ -50,7 +47,7 @@ app.get('/register', checkNotAuthenticated, (req, res) => {
     res.render('register.ejs');
 });
 
-app.post('/register', checkNotAuthenticated,  async (req, res) => {
+app.post('/register', checkNotAuthenticated, async (req, res) => {
     try {
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
         users.push({
@@ -60,7 +57,8 @@ app.post('/register', checkNotAuthenticated,  async (req, res) => {
             password: hashedPassword,
         });
         res.redirect('/login');
-    } catch {
+    } catch (e) {
+        console.log(e);
         res.redirect('/register');
     }
     console.log(users);
@@ -88,4 +86,4 @@ function checkNotAuthenticated(req, res, next) {
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
-  })
+})
